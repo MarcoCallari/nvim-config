@@ -141,8 +141,8 @@ vnoremap K 10j
 vnoremap L 10k
 
 " stay in normal mode after inserting a new line
-noremap o o <Bs><Esc>
-noremap O O <Bs><Esc>
+"noremap o o <Bs><Esc>
+"noremap O O <Bs><Esc>
 
 " mapping that opens .vimrc in a split for quick editing
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
