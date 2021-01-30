@@ -4,7 +4,7 @@ cwd=<root>
 errorformat=
 
 [project-build-run]
-command=cmake --build build && ./"build/src/$(VIM_PRONAME)"
+command= cd build && cmake .. && cmake --build . && cd src && ./"$(VIM_PRONAME)"
 cwd=<root>
 errorformat=%f:%l:%m
 
