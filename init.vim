@@ -59,6 +59,10 @@ Plug 'tikhomirov/vim-glsl'
 
 Plug 'drewtempelmeyer/palenight.vim'
 
+" search
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 call plug#end()			
 
 
@@ -76,7 +80,13 @@ set showcmd
 set noswapfile
 set nobackup
 set nowb
- 
+
+" :e opens local folder
+set autochdir
+
+" :e opens unchanged files. 
+set autowrite
+
 " TODO: improve behaviour
 " reload files changed outside vim
 set autoread
@@ -94,7 +104,7 @@ set foldnestmax=3       "deepest fold is 3 levels
 set nofoldenable        "dont fold by default
 
 
-" ================ Srolling =========================
+" ================ Scrolling =========================
 
 " Start scrolling when we're 8 lines away from margins
 set scrolloff=8
@@ -125,8 +135,6 @@ noremap <C-c> "+y
 noremap <C-v> "+p
 " cut
 noremap <C-x> "+d
-" paste in insert mode
-inoremap <C-v> <Esc>"+pa
 
 "Shift movement keys right 
 noremap j h
@@ -149,16 +157,14 @@ nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 " mapping that sources the vimrc in the current file
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
-" Mapping U to Redo.
-noremap U <c-r>
-noremap <c-r> <NOP>
-
 " indent via Tab
 nnoremap <Tab> >>_
 nnoremap <S-Tab> <<_
 vnoremap <Tab> >>_
 vnoremap <S-Tab> <<_
-
+"Open in explorer(Windows only)
+nmap <F11> :!start explorer /e,,%:p:h<CR>
+imap <F11> <Esc><F11>
 " ================ Visualization ====================
  
 " enable true colors
