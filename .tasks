@@ -1,0 +1,19 @@
+[project-init]
+command=mkdir build && cd build && cmake ..
+cwd=<root>
+errorformat=
+
+[project-build-run]
+command= cd build && cmake .. && cmake --build . && cd src && ./"$(VIM_PRONAME)"
+cwd=<root>
+errorformat=%f:%l:%m
+
+[project-build-only]
+command=cmake --build build
+cwd=<root>
+errorformat=%f:%l:%m
+
+[project-run-only]
+command= ./"build/src/$(VIM_PRONAME)"
+cwd=<root>
+output=terminal

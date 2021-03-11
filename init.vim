@@ -3,9 +3,14 @@
 " | | | | | | |_ \ V /| | | | | | |
 " |_|_| |_|_|\__(_)_/ |_|_| |_| |_|
  
+set encoding=utf-8
+
 " ==================== VIM PLUG ==================
 
 call plug#begin('~/.vim/plugged')
+
+" Async calls
+Plug 'skywind3000/asyncrun.vim'
 
 " fugitive - git support
 Plug 'tpope/vim-fugitive'
@@ -63,9 +68,16 @@ Plug 'drewtempelmeyer/palenight.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
+"Asynctasks - build tools
+Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
+
 call plug#end()			
 
+" Search and replace
+Plug 'eugen0329/vim-esearch'
 
+" gdb 
 " ================ Suggestions ======================
  
 " show wild menu (menu of suggestions) when typing commands in command mode
@@ -127,14 +139,11 @@ endif
 map <Bslash> mapleader 
 
 " clipboard
-set clipboard=unnamedplus
+set clipboard^=unnamed,unnamedplus
 
-" copy
-noremap <C-c> "+y
-" paste
-noremap <C-v> "+p
-" cut
-noremap <C-x> "+d
+"Build commands
+noremap <silent><f5> :AsyncTask project-build-run<cr>
+noremap <silent><f7> :AsyncTask project-build-only<cr>
 
 "Shift movement keys right 
 noremap j h
@@ -261,6 +270,8 @@ iab funcition function
 
 
 " ================ Misc =============================
+
+let g:asyncrun_open = 6
 
 " highlight matching braces
 set showmatch
