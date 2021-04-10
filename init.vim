@@ -16,6 +16,7 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "Syntax highlighting
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " fugitive - git support
 Plug 'tpope/vim-fugitive'
@@ -74,10 +75,10 @@ Plug 'junegunn/fzf.vim'
 Plug 'skywind3000/asynctasks.vim'
 Plug 'skywind3000/asyncrun.vim'
 
-call plug#end()			
-
 " Search and replace
 Plug 'eugen0329/vim-esearch'
+
+call plug#end()			
 
 " gdb 
 " ================ Suggestions ======================
@@ -213,22 +214,6 @@ set expandtab
  
 " numbers
 set number " see the line number column
-
-" Toggle relative numbering, and set to absolute on loss of focus or insert mode
-autocmd InsertEnter * :set nornu
-"autocmd InsertLeave * :set rnu
-autocmd InsertLeave * :set nornu
-" we don't want to see relative numbering while debugging
-" debugger uses its own window, so we can disable rnu when source window loses
-" focus
-autocmd BufLeave * :set nornu
-autocmd BufEnter * call SetRNU()
-function! SetRNU()
-    if(mode()!='i')
-        set rnu 
-    endif
-endfunction
-
 
 " ================ Searching ========================
 
@@ -405,42 +390,6 @@ let g:UltiSnipsUsePythonVersion = 3
 "inoremap <C-l> <Up>
 
 
-" ################ YouCompleteMe ####################
-
-let g:ycm_show_diagnostics_ui = 0
-
-let g:ycm_key_list_select_completion = ['<C-k>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-l>', '<Up>']
-let g:SuperTabDefaulCompletionType = '<C-k>'
-
-" disable annoying ycm confirmation
-let g:ycm_confirm_extra_conf = 0
-
-" add path to ycm_extra_conf.py (you could also copy the file in the home folder)
-" delete '...98' argument from .ycm_extra_conf.py, otherwise syntastic does
-" not work properly
-let g:ycm_global_ycm_extra_conf = '/home/jan/.vim/plugged/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-
- 
-" ################ Ale ##############################
- 
-" autocompletion
-let g:ale_completion_enabled = 1
-
-let g:ale_cpp_clang_executable = 'clang++-5.0'
-
-" linter
- let g:ale_linters = {
-            \   'cpp': ['clang']
-            \}
-let g:ale_cpp_clang_options = '-std=c++1z -O0 -Wextra -Wall -Wpedantic -I /usr/include/eigen3'
-"let g:ale_cpp_clangtidy_options = '-checks="cppcoreguidelines-*"'
-"let g:ale_cpp_cpplint_options = ''
-"let g:ale_cpp_gcc_options = ''
-"let g:ale_cpp_clangcheck_options = ''
-"let g:ale_cpp_cppcheck_options = ''
-
-
 " ################ Clang format #####################
  
 " Clang format - auto formatting
@@ -485,27 +434,27 @@ let g:indexer_disableCtagsWarning = 1
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+     \ pumvisible() ? "\<C-n>" :
+     \ <SID>check_back_space() ? "\<TAB>" :
+     \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+ let col = col('.') - 1
+ return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Use <c-space> to trigger completion.
 if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
+ inoremap <silent><expr> <c-space> coc#refresh()
 else
-  inoremap <silent><expr> <c-@> coc#refresh()
+ inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+                             \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -522,13 +471,13 @@ nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
+ if (index(['vim','help'], &filetype) >= 0)
+   execute 'h '.expand('<cword>')
+ elseif (coc#rpc#ready())
+   call CocActionAsync('doHover')
+ else
+   execute '!' . &keywordprg . " " . expand('<cword>')
+ endif
 endfunction
 
 " Highlight the symbol and its references when holding the cursor.
@@ -542,11 +491,11 @@ xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+ autocmd!
+ " Setup formatexpr specified filetype(s).
+ autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+ " Update signature help on jump placeholder.
+ autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 " Applying codeAction to the selected region.
@@ -572,12 +521,12 @@ omap ac <Plug>(coc-classobj-a)
 
 " Remap <C-f> and <C-b> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+ nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+ nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+ inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+ inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+ vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+ vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
 " Use CTRL-S for selections ranges.
@@ -616,3 +565,9 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+"Enable mouse
+set mouse=a
+
+"Enable treesitter syntax highlighting
+lua require'nvim-treesitter.configs'.setup { highlight = { enable = true } }
